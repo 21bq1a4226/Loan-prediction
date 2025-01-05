@@ -159,42 +159,42 @@ def loan_page():
         prediction = model.predict(features)
         lc = [str(i) for i in prediction]
         ans = int("".join(lc))
-    if ans == 0:
-        st.markdown(
-            f"""
-            <div style='
-                background-color:#f8d7da;
-                padding:15px;
-                border-radius:5px;
-                border:1px solid #f5c2c7;
-                color:#842029;
-                font-size:16px;
-                font-weight:bold;
-            '>
-                Hello: {fn}->Account number: {account_no} <br>
-                According to our Calculations, you will <b>not</b> get the loan from the Bank.
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-    else:
-        st.markdown(
-            f"""
-            <div style='
-                background-color:#d1e7dd;
-                padding:15px;
-                border-radius:5px;
-                border:1px solid #badbcc;
-                color:#0f5132;
-                font-size:16px;
-                font-weight:bold;
-            '>
-                Hello: {fn} ->Account number: {account_no} <br>
-                Congratulations!! You will get the loan from the Bank.
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        if ans == 0:
+            st.markdown(
+                f"""
+                <div style='
+                    background-color:#f8d7da;
+                    padding:15px;
+                    border-radius:5px;
+                    border:1px solid #f5c2c7;
+                    color:#842029;
+                    font-size:16px;
+                    font-weight:bold;
+                '>
+                    Hello: {fn}->Account number: {account_no} <br>
+                    According to our Calculations, you will <b>not</b> get the loan from the Bank.
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                f"""
+                <div style='
+                    background-color:#d1e7dd;
+                    padding:15px;
+                    border-radius:5px;
+                    border:1px solid #badbcc;
+                    color:#0f5132;
+                    font-size:16px;
+                    font-weight:bold;
+                '>
+                    Hello: {fn} ->Account number: {account_no} <br>
+                    Congratulations!! You will get the loan from the Bank.
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
 
 def visualizations_page():
