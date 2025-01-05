@@ -141,24 +141,24 @@ def loan_page():
         dur_display = ['2 Month','6 Month','8 Month','1 Year','16 Month']
         dur_options = range(len(dur_display))
         dur = st.selectbox("Loan Duration",dur_options, format_func=lambda x: dur_display[x])
-        ans=0
-        if st.form_submit_button("Submit"):
-            duration = 0
-            if dur == 0:
-                duration = 60
-            if dur == 1:
-                duration = 180
-            if dur == 2:
-                duration = 240
-            if dur == 3:
-                duration = 360
-            if dur == 4:
-                duration = 480
-            features = [[gen, mar, dep, edu, emp, mon_income, co_mon_income, loan_amt, duration, cred, prop]]
-            print(features)
-            prediction = model.predict(features)
-            lc = [str(i) for i in prediction]
-            ans = int("".join(lc))
+        submitted=st.form_submit_button("Submit")
+    if submitted:
+        duration = 0
+        if dur == 0:
+            duration = 60
+        if dur == 1:
+            duration = 180
+        if dur == 2:
+            duration = 240
+        if dur == 3:
+            duration = 360
+        if dur == 4:
+            duration = 480
+        features = [[gen, mar, dep, edu, emp, mon_income, co_mon_income, loan_amt, duration, cred, prop]]
+        print(features)
+        prediction = model.predict(features)
+        lc = [str(i) for i in prediction]
+        ans = int("".join(lc))
     if ans == 0:
         st.markdown(
             f"""
