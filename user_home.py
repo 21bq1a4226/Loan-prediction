@@ -29,7 +29,7 @@ def user_profile():
     profile_css = """
     <style>
         .profile-container {
-            background-color: #f8f9fa;
+            background-color: aliceblue;
             padding: 60px;
             border-radius: 50px;
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
@@ -141,63 +141,76 @@ def loan_page():
         dur_display = ['2 Month','6 Month','8 Month','1 Year','16 Month']
         dur_options = range(len(dur_display))
         dur = st.selectbox("Loan Duration",dur_options, format_func=lambda x: dur_display[x])
-        submitted=st.form_submit_button("Submit")
-    if submitted:
-        duration = 0
-        if dur == 0:
-            duration = 60
-        if dur == 1:
-            duration = 180
-        if dur == 2:
-            duration = 240
-        if dur == 3:
-            duration = 360
-        if dur == 4:
-            duration = 480
-        features = [[gen, mar, dep, edu, emp, mon_income, co_mon_income, loan_amt, duration, cred, prop]]
-        print(features)
-        prediction = model.predict(features)
-        lc = [str(i) for i in prediction]
-        ans = int("".join(lc))
-        if ans == 0:
-            st.markdown(
-                f"""
-                <div style='
-                    background-color:#f8d7da;
-                    padding:15px;
-                    border-radius:5px;
-                    border:1px solid #f5c2c7;
-                    color:#842029;
-                    font-size:16px;
-                    font-weight:bold;
-                '>
-                    Hello: {fn}->Account number: {account_no} <br>
-                    According to our Calculations, you will <b>not</b> get the loan from the Bank.
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-        else:
-            st.markdown(
-                f"""
-                <div style='
-                    background-color:#d1e7dd;
-                    padding:15px;
-                    border-radius:5px;
-                    border:1px solid #badbcc;
-                    color:#0f5132;
-                    font-size:16px;
-                    font-weight:bold;
-                '>
-                    Hello: {fn} ->Account number: {account_no} <br>
-                    Congratulations!! You will get the loan from the Bank.
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+        if st.form_submit_button("Submit"):
+            duration = 0
+            if dur == 0:
+                duration = 60
+            if dur == 1:
+                duration = 180
+            if dur == 2:
+                duration = 240
+            if dur == 3:
+                duration = 360
+            if dur == 4:
+                duration = 480
+            features = [[gen, mar, dep, edu, emp, mon_income, co_mon_income, loan_amt, duration, cred, prop]]
+            print(features)
+            prediction = model.predict(features)
+            lc = [str(i) for i in prediction]
+            ans = int("".join(lc))
+            if ans == 0:
+                st.markdown(
+                    f"""
+                    <div style='
+                        background-color:#f8d7da;
+                        padding:15px;
+                        border-radius:5px;
+                        border:1px solid #f5c2c7;
+                        color:#842029;
+                        font-size:16px;
+                        font-weight:bold;
+                    '>
+                        Hello: {fn}->Account number: {account_no} <br>
+                        According to our Calculations, you will <b>not</b> get the loan from the Bank.
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            else:
+                st.markdown(
+                    f"""
+                    <div style='
+                        background-color:#d1e7dd;
+                        padding:15px;
+                        border-radius:5px;
+                        border:1px solid #badbcc;
+                        color:#0f5132;
+                        font-size:16px;
+                        font-weight:bold;
+                    '>
+                        Hello: {fn} ->Account number: {account_no} <br>
+                        Congratulations!! You will get the loan from the Bank.
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
 
 def visualizations_page():
+    st.markdown(
+        """
+        <style>
+        /* Apply background image to the main content area */
+        .main {
+            background-image: url('https://img.freepik.com/free-vector/network-line-abstract-background-gradient_483537-2780.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
     data=pd.read_csv('Loan_Data/train.csv')
     st.title('Visualizations')
     #place option for the user to see the EDA and model plots
@@ -296,13 +309,16 @@ def visualizations_page():
             st.image('Model/7.png')
 def user_home_page():
     # Navigation menu for user dashboard
+    
     with st.sidebar:
+        name=st.session_state['user'][1]
+        st.markdown(f"<h1 style='text-align: center; color: black;'><b>{name}'s Dashboard</b></h1>", unsafe_allow_html=True)
         selected_tab = option_menu(
             menu_title=None,
             options=["User Profile", "Visualizations", "Bank Loan",'Logout'],
             icons=['person','bar-chart','bank'], menu_icon="cast", default_index=0,
         styles={
-        "nav-link-selected": {"background-color": "skyblue", "color": "black", "border-radius": "5px"},
+        "nav-link-selected": {"background-color": "red", "color": "white", "border-radius": "30px"},
         }
         )
     if selected_tab == "User Profile":
