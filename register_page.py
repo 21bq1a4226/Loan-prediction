@@ -3,6 +3,21 @@ import re
 from db_manager import register_user
 
 def register_page():
+    st.markdown(
+        """
+        <style>
+        /* Apply background image to the main content area */
+        .main {
+            background-image: url('https://www.kotak.com/content/dam/Kotak/article/home-loan/astounding-details-you-should-know-about-home-loan-emi-calculator-that-no-one-has-ever-told-you-d.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     # Center the registration form container using Streamlit form layout
     with st.form(key="register_form"):
         # Title
