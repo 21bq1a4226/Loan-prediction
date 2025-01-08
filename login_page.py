@@ -2,6 +2,21 @@ import streamlit as st
 from db_manager import validate_user
 
 def login_page():
+    st.markdown(
+        """
+        <style>
+        /* Apply background image to the main content area */
+        .main {
+            background-image: url('https://poonawallafincorp.com/pfca/assets/blog_banner/1649187099.jpeg    ');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     # Center the login form using Streamlit form layout
     with st.form(key="login_form"):
         # Title
