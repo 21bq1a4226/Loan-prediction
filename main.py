@@ -4,6 +4,7 @@ from register_page import register_page
 from db_manager import init_db
 from streamlit_option_menu import option_menu
 from home_page import home_page
+from about_page import about_page
 # Initialize the database
 init_db()
 
@@ -18,15 +19,19 @@ if st.session_state["page"] == "Home":
     # Horizontal navigation for non-logged-in users
     selected_page = option_menu(
         menu_title=None,
-        options=["Home", "Login", "Register"],
-        icons=["house", "box-arrow-in-right", "person-plus"],
+        options=["Home", "Login", "Register",'About'],
+        icons=["house", "box-arrow-in-right", "person-plus","info-circle"],
         menu_icon="cast",
         default_index=0,
         orientation="horizontal",
         styles={
             "nav-link-selected": {
-                "background-color": "#0ebae6",
+                "background-color": "red",
                 "color": "white",
+            },
+            "nav-link": {
+                "background-color": "#f5c1f7",
+                "color": "black",
             },
         },
     )
@@ -37,6 +42,8 @@ if st.session_state["page"] == "Home":
         login_page()
     elif selected_page == "Register":
         register_page()
+    elif selected_page == "About":
+        about_page()
 
 elif st.session_state["page"] == "user_home":
     # Redirect to the user dashboard after login
