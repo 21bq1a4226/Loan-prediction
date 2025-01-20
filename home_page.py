@@ -18,20 +18,8 @@ def home_page():
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        background-color: rgba(255, 255, 255, 0.5);
-        background-blend-mode: overlay;
     }
     </style>
     """,
     unsafe_allow_html=True
-    )
-
-    # Center the image
-    st.markdown(
-        """
-        <div style="text-align: center;">
-            <img src="https://miro.medium.com/v2/resize:fit:735/0*_DPvD2SGibZBsb9f.jpg" style="max-width: 40%;">
-        </div>
-        """,
-        unsafe_allow_html=True
     )
