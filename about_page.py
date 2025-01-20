@@ -6,7 +6,7 @@ def about_page():
         <style>
         /* Apply background image to the main content area */
         .main {
-            background-image: url('https://images.timesproperty.com/blog/1316/TP_iStock_934521186_GNP_SS.jpg');
+            background-image: url('https://i.pinimg.com/736x/11/38/c3/1138c346b9129c95708bd3bcc22cf1dd.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
