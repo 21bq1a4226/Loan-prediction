@@ -7,7 +7,7 @@ def login_page():
         <style>
         /* Apply background image to the main content area */
         .main {
-            background-image: url('https://poonawallafincorp.com/pfca/assets/blog_banner/1649187099.jpeg    ');
+            background-image: url('https://img.freepik.com/premium-photo/hand-holding-plant-that-grow-coins-investment-concept_693425-2891.jpg?w=1060');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
