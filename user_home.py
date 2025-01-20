@@ -12,6 +12,7 @@ def user_profile():
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
+        
     }
     </style>
     """,
@@ -84,6 +85,22 @@ def user_profile():
     st.markdown(profile_css + profile_html, unsafe_allow_html=True)
 
 def loan_page():
+    st.markdown(
+            """
+            <style>
+            /* Apply background image to the main content area */
+            .main {
+                background-image: url('https://media.istockphoto.com/id/508021898/video/education-expenses-loan-graduation-cap-on-smart-phone-pad-mobile.jpg?s=640x640&k=20&c=eBi43oQi4lApJzAuYDVVWOQBf0nZ3sb99fbn-pJEBhg=');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-color: rgba(255, 255, 255, 0.6); /* Add a semi-transparent overlay */
+                background-blend-mode: overlay; /* Blend the image with the overlay */
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
     with st.form(key='loan_form'):
         st.subheader('Select the values from the dropdown menu to get the bank loan prediction')
         model = pickle.load(open('./Model/ML_Model.pkl', 'rb'))
