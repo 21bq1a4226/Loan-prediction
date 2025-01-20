@@ -18,7 +18,6 @@ def about_page():
 
     # Center the registration form container using Streamlit form layout
     # Title
-    st.title("About Page")
     st.markdown("---")
     st.markdown(
         """
