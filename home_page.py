@@ -14,7 +14,7 @@ def home_page():
     <style>
     /* Apply background image to the main content area */
     .main {
-        background-image: url('https://www.shutterstock.com/image-photo/child-boy-using-tablet-looking-600nw-2225757071.jpg');
+        background-image: url('https://plus.unsplash.com/premium_photo-1661425407118-e64871d1ab65?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aG9tZSUyMGxvYW58ZW58MHx8MHx8fDA%3D');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
