@@ -8,10 +8,12 @@ def register_page():
         <style>
         /* Apply background image to the main content area */
         .main {
-            background-image: url('https://www.kotak.com/content/dam/Kotak/article/home-loan/astounding-details-you-should-know-about-home-loan-emi-calculator-that-no-one-has-ever-told-you-d.jpg');
+            background-image: url('https://i0.wp.com/csep.org/wp-content/uploads/2023/06/AdobeStock_568439321-1.jpeg?fit=800,533&ssl=1');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-color: rgba(255, 255, 255, 0.6); /* Add a semi-transparent overlay */
+            background-blend-mode: overlay; /* Blend the image with the overlay */
         }
         </style>
         """,
