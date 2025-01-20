@@ -11,6 +11,8 @@ def login_page():
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-color: rgba(255, 255, 255, 0.6); /* Add a semi-transparent overlay */
+            background-blend-mode: overlay; /* Blend the image with the overlay */
         }
         </style>
         """,
