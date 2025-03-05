@@ -19,7 +19,7 @@ if st.session_state["page"] == "Home":
     # Horizontal navigation for non-logged-in users
     selected_page = option_menu(
         menu_title=None,
-        options=["Home", "Login", "Register",'About'],
+        options=["Home", "Login", "Register",'Forgot Password'],
         icons=["house", "box-arrow-in-right", "person-plus","info-circle"],
         menu_icon="cast",
         default_index=0,
@@ -42,7 +42,7 @@ if st.session_state["page"] == "Home":
         login_page()
     elif selected_page == "Register":
         register_page()
-    elif selected_page == "About":
+    elif selected_page == "Forgot Password":
         about_page()
 
 elif st.session_state["page"] == "user_home":

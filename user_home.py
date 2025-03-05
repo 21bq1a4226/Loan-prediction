@@ -1,7 +1,12 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
+from db_manager import update_user,get_user_by_email
 import pickle
+import matplotlib.pyplot as plt
+import joblib
+import seaborn as sns
+import random
 def user_profile():
     st.markdown(
     """
@@ -12,25 +17,53 @@ def user_profile():
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        
     }
     </style>
     """,
     unsafe_allow_html=True
     )
     # Extracting user data
+    #name, email, gender, weight, hereditary_disease, age, smoking, regular_bp_level, diabetes, regular_exercise, marital_status, no_of_dependents, education, employment, property_status, credit_score, credit_history, annual_income, co_applicant_annual_income, loan_amount, loan_duration, existing_loan, existing_loan_amount, existing_loan_duration, existing_loan_type, language, password
     user_data = st.session_state.get('user', ['', 'Unknown', 'Unknown'])
+    user_data=get_user_by_email(user_data[2])
     name = user_data[1]
     email = user_data[2]
+    gender = user_data[3]
+    weight = user_data[4]
+    hereditary_disease = user_data[5]
+    age=user_data[6]
+    smoking=user_data[7]
+    regular_bp_level=user_data[8]
+    diabetes=user_data[9]
+    regular_exercise=user_data[10]
+    marital_status=user_data[11]
+    no_of_dependents=user_data[12]
+    education=user_data[13]
+    employment=user_data[14]
+    property_status=user_data[15]
+    credit_score=user_data[16]
+    credit_history=user_data[17]
+    annual_income=user_data[18]
+    co_applicant_annual_income=user_data[19]
+    loan_amount=user_data[20]
+    loan_duration=user_data[21]
+    existing_loan=user_data[22]
+    existing_loan_amount=user_data[23]
+    existing_loan_duration=user_data[24]
+    existing_loan_type=user_data[25]
+    language=user_data[26]
+
     
     # General image link
-    image_link = "https://cdn-icons-png.flaticon.com/512/4042/4042356.png"  # Replace with your image URL
+    image_link = "https://static.vecteezy.com/system/resources/previews/043/987/923/non_2x/loan-papers-3d-icon-png.png"  # Replace with your image URL
 
     # CSS Styling
     profile_css = """
     <style>
         .profile-container {
-            background-color: aliceblue;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-jOCuD46_00GQu3qlaWE_lTjARY6wKVEUCKhK6k_m3XSL-91nl2Pg1lg1h633d3cG5K0&usqp=CAU');
+            background-size: cover;
+            background-position: center;
             padding: 60px;
             border-radius: 50px;
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
@@ -48,21 +81,23 @@ def user_profile():
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #333;
+            color: red;
         }
         .profile-item {
             font-size: 18px;
-            margin-bottom: 10px;
+            margin-bottom: 2px;
             color: #555;
         }
         .profile-image {
-            flex-shrink: 0;
+            bordwe-radius: 50px;
             margin-left: 20px;
+            margin-bottom: 100px;
         }
         .profile-image img {
-            border-radius: 50%;
-            max-width: 200px;
-            max-height: 200px;
+            border-radius: 50px;
+            margin-top: 80px;
+            max-width: 250px;
+            max-height: 500px;
         }
     </style>
     """
@@ -71,9 +106,18 @@ def user_profile():
     profile_html = f"""
     <div class="profile-container">
         <div class="profile-details">
-            <div class="profile-header">User Profile</div>
-            <div class="profile-item"><strong>Name:</strong> {name}</div>
-            <div class="profile-item"><strong>Email:</strong> {email}</div>
+            <div class="profile-header">𝚄𝚜𝚎𝚛 𝙿𝚛𝚘𝚏𝚒𝚕𝚎</div>
+            <div class="profile-item"><strong>𝕹𝖆𝖒𝖊:</strong> {name}</div>
+            <div class="profile-item"><strong>𝕰𝖒𝖆𝖎𝖑:</strong> {email}</div>
+            <div class="profile-item"><strong>𝕲𝖊𝖓𝖉𝖊𝖗:</strong> {gender}</div>
+            <div class="profile-item"><strong>𝖂𝖊𝖎𝖌𝖍𝖙:</strong> {weight}</div>
+            <div class="profile-item"><strong>𝕬𝖌𝖊:</strong> {age}</div>
+            <div class="profile-item"><strong>𝕾𝖒𝖔𝖐𝖎𝖓𝖌:</strong> {smoking}</div>
+            <div class="profile-item"><strong>𝕸𝖆𝖗𝖎𝖙𝖆𝖑 𝕾𝖙𝖆𝖙𝖚𝖘:</strong> {marital_status}</div>
+            <div class="profile-item"><strong>𝕰𝖉𝖚𝖈𝖆𝖙𝖎𝖔𝖓:</strong> {education}</div>
+            <div class="profile-item"><strong>𝕰𝖒𝖕𝖑𝖔𝖞𝖒𝖊𝖓𝖙:</strong> {employment}</div>
+            <div class="profile-item"><strong>𝕮𝖗𝖊𝖉𝖎𝖙 𝕾𝖈𝖔𝖗𝖊:</strong> {credit_score}</div>
+            <div class="profile-item"><strong>𝕬𝖓𝖓𝖚𝖆𝖑 𝕴𝖓𝖈𝖔𝖒𝖊:</strong> {annual_income}</div>
         </div>
         <div class="profile-image">
             <img src="{image_link}" alt="User Image">
@@ -85,132 +129,752 @@ def user_profile():
     st.markdown(profile_css + profile_html, unsafe_allow_html=True)
 
 def loan_page():
+    #display existing loan details from the user
+    user_data = st.session_state.get('user', ['', 'Unknown', 'Unknown'])
+    user_data=get_user_by_email(user_data[2])
+    existing_loan=user_data[22]
+    existing_loan_amount=user_data[23]*1000
+    existing_loan_duration=user_data[24]
+    existing_loan_type=user_data[25]
+    #display the existing loan details in ui
     st.markdown(
-            """
-            <style>
-            /* Apply background image to the main content area */
-            .main {
-                background-image: url('https://media.istockphoto.com/id/508021898/video/education-expenses-loan-graduation-cap-on-smart-phone-pad-mobile.jpg?s=640x640&k=20&c=eBi43oQi4lApJzAuYDVVWOQBf0nZ3sb99fbn-pJEBhg=');
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                background-color: rgba(255, 255, 255, 0.7); /* Add a semi-transparent overlay */
-                background-blend-mode: overlay; /* Blend the image with the overlay */
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-    with st.form(key='loan_form'):
-        st.subheader('Select the values from the dropdown menu to get the bank loan prediction')
-        model = pickle.load(open('./Model/ML_Model.pkl', 'rb'))
-        ## Account No
-        account_no = st.text_input('Account number')
+    """
+    <div style="text-align: center; padding: 5px; background-image: url('https://img.freepik.com/premium-vector/stock-market-investment-trading-graph-graphic-concept-suitable-financial-investment_258787-30.jpg?semt=ais_hybrid');
+    background-size: cover; background-position: center; background-repeat: no-repeat;
+                border-radius: 20px; border: 1.5px solid black; margin-bottom: 10px;">
+        <p style="color: red; font-size: 30px;"><b>Existing Loan Details</b></p>
+        <div style="display: flex; justify-content: space-around; padding: 10px; font-size: 18px;">
+            <div style="flex: 1; padding: 10px;"><b> Loan Type:</b> {existing_loan_type}</div>
+        </div>
+        <div style="display: flex; justify-content: space-around; padding: 10px; font-size: 18px;">
+            <div style="flex: 1; padding: 10px;"><b> Loan Amount:</b> {existing_loan_amount} INR</div>
+            <div style="flex: 1; padding: 10px;"><b> Loan Duration:</b> {existing_loan_duration} years</div>
+        </div>
+    </div>
+    """.format(
+        existing_loan=existing_loan,
+        existing_loan_amount=existing_loan_amount,
+        existing_loan_duration=existing_loan_duration,
+        existing_loan_type=existing_loan_type,
+    ),
+    unsafe_allow_html=True
+    )
+    loans=['Bank Loan','Home Loan','Vehicle Loan','Health insurance Loan','Personal Loan']
+    bank_loan=0
+    home_loan=0
+    vehicle_loan=0
+    health_insurance_loan=0
+    personal_loan=0
+    #health inputs are age, sex,weight,bmi,hereiditary disease,no of dependtss, smoking, city, bp,diabetes, regular exercise, job title
+    age=user_data[6]
+    sex = 0 if user_data[3] == 'Female' else 1
+    weight=user_data[4]
+    bmi=weight/((weight/100)**2)
+    dic={'NoDisease':0, 'Epilepsy':1, 'EyeDisease':2, 'Alzheimer':3, 'Arthritis':4,
+       'HeartDisease':5, 'Diabetes':6, 'Cancer':7, 'High BP':8, 'Obesity':9}
+    hereditary_disease=dic[user_data[5]]
+    no_of_dependents=user_data[12]
+    smoking=1 if user_data[7]=='Yes' else 0
+    city=0
+    bp=user_data[8]
+    diabetes=1 if user_data[9]=='Yes' else 0
+    regular_exercise=1 if user_data[10]=='Yes' else 0
+    val=[ 2, 16,  0, 10, 22, 12, 32, 13, 30, 33, 15, 28, 29,  5,  8,  6,  9,
+       26,  1, 19, 34, 18,  4, 23, 20,  7, 31, 14,  3, 11, 24, 17, 25, 27,
+       21]
+    job_title=random.choice(val)
+    model = joblib.load("Health Loan/health_insurance_model.pkl")
+    input_data = pd.DataFrame([[
+        age, sex, weight, bmi, hereditary_disease, no_of_dependents, smoking, city, bp, diabetes, regular_exercise, job_title
+    ]])
+    prediction = model.predict(input_data)
+    health_insurance_loan=prediction[0]
 
-        ## Full Name
-        fn=st.session_state['user'][1]
-        col1, col2 = st.columns(2)
-        with col1:
-            ## For gender
-            gen_display = ('Female','Male')
-            gen_options = list(range(len(gen_display)))
-            gen = col1.selectbox("Gender",gen_options, format_func=lambda x: gen_display[x])
-        with col2:
-            ## For Marital Status
-            mar_display = ('No','Yes')
-            mar_options = list(range(len(mar_display)))
-            mar = col2.selectbox("Marital Status", mar_options, format_func=lambda x: mar_display[x])
-        with col1:
-            ## No of dependets
-            dep_display = ('No','One','Two','More than Two')
-            dep_options = list(range(len(dep_display)))
-            dep = col1.selectbox("Dependents",  dep_options, format_func=lambda x: dep_display[x])
-        with col2:
-            ## For edu
-            edu_display = ('Not Graduate','Graduate')
-            edu_options = list(range(len(edu_display)))
-            edu = col2.selectbox("Education",edu_options, format_func=lambda x: edu_display[x])
-        with col1:
-            ## For emp status
-            emp_display = ('Job','Business')
-            emp_options = list(range(len(emp_display)))
-            emp = col1.selectbox("Employment Status",emp_options, format_func=lambda x: emp_display[x])
-        with col2:
-            ## For Property status
-            prop_display = ('Rural','Semi-Urban','Urban')
-            prop_options = list(range(len(prop_display)))
-            prop = col2.selectbox("Property Area",prop_options, format_func=lambda x: prop_display[x])
-        with col1:
-            ## For Credit Score
-            cred_display = ('Between 300 to 500','Above 500')
-            cred_options = list(range(len(cred_display)))
-            cred = col1.selectbox("Credit Score",cred_options, format_func=lambda x: cred_display[x])
-        with col2:
-            ## Applicant Monthly Income
-            mon_income = col2.number_input("Applicant's Monthly Income($)",value=0)
-        with col1:
-            ## Co-Applicant Monthly Income
-            co_mon_income = col1.number_input("Co-Applicant's Monthly Income($)",value=0)
-        with col2:
-            ## Loan AMount
-            loan_amt = col2.number_input("Loan Amount",value=0)
-        ## loan duration
-        dur_display = ['2 Month','6 Month','8 Month','1 Year','16 Month']
-        dur_options = range(len(dur_display))
-        dur = st.selectbox("Loan Duration",dur_options, format_func=lambda x: dur_display[x])
-        if st.form_submit_button("Submit"):
-            duration = 0
-            if dur == 0:
-                duration = 60
-            if dur == 1:
-                duration = 180
-            if dur == 2:
-                duration = 240
-            if dur == 3:
-                duration = 360
-            if dur == 4:
-                duration = 480
-            features = [[gen, mar, dep, edu, emp, mon_income, co_mon_income, loan_amt, duration, cred, prop]]
-            print(features)
-            prediction = model.predict(features)
-            lc = [str(i) for i in prediction]
-            ans = int("".join(lc))
-            if ans == 0:
-                st.markdown(
-                    f"""
-                    <div style='
-                        background-color:#f8d7da;
-                        padding:15px;
-                        border-radius:5px;
-                        border:1px solid #f5c2c7;
-                        color:#842029;
-                        font-size:16px;
-                        font-weight:bold;
-                    '>
-                        Hello: {fn}->Account number: {account_no} <br>
-                        According to our Calculations, you will <b>not</b> get the loan from the Bank.
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-            else:
-                st.markdown(
-                    f"""
-                    <div style='
-                        background-color:#d1e7dd;
-                        padding:15px;
-                        border-radius:5px;
-                        border:1px solid #badbcc;
-                        color:#0f5132;
-                        font-size:16px;
-                        font-weight:bold;
-                    '>
-                        Hello: {fn} ->Account number: {account_no} <br>
-                        Congratulations!! You will get the loan from the Bank.
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+    
+    #inputs for home loan are Gender, Married, Dependents, Education, CoapplicantIncome, LoanAmount, Loan_Amount_Term, Credit_History, Property_Area
+    gender=1 if user_data[3] == 'Male' else 0
+    married=0 if user_data[11]=='Unmarried' else 1
+    dependents=user_data[12]
+    education=1 if user_data[13]=='Graduate' else 0
+    coapplicant_income=user_data[19]
+    loan_amount=user_data[20]
+    loan_amount_term=user_data[21]
+    credit_history=1 if user_data[17]=='Good' else 0.5 if user_data[17]=='Average' else 0
+    property_area=0 if user_data[15]=='Rural' else 2 if user_data[15]=='Urban' else 1
+    model = joblib.load("Home Loan/home_loan_model.pkl")
+    scaler = joblib.load("Home Loan/home_loan_scaler.pkl")
+        # Convert categorical inputs
+    user_df=[[gender,married, dependents,education,coapplicant_income,loan_amount, loan_amount_term
+             , credit_history,property_area]]
+    user_df_scaled = scaler.transform(user_df)
+    # Make prediction
+    prediction = model.predict(user_df_scaled)
+    if prediction[0]==1:
+        home_loan=1
+    #inputs vehicle loan
+    #gender, Existing Customer, Employment Profile, Age Income, Credit Score, Credit History Length,Number of Existing Loans,Loan Amount, Loan Tenure, LTV Ratio, Profile Score
+    gender=1 if user_data[3]=='Male' else 0
+    existing_customer=1 if user_data[22]=='Yes' else 0
+    l=['Salaried', 'Self-Employed', 'Freelancer', 'Student' ,'Unemployed']
+    employment_profile=l.index(user_data[14])
+    age=user_data[6]
+    income=user_data[18]
+    credit_score=user_data[16]
+    dic={'Good':1,'Bad':0,'Average':0.5}
+    credit_history_length=dic[user_data[17]]
+    number_of_existing_loans=1
+    loan_amount=user_data[20]
+    loan_tenure=user_data[21]
+    ltv_ratio=loan_amount/loan_tenure   
+    profile_score=1
+    input_data={'Gender':gender,'Existing Customer':existing_customer,'Employment Profile':employment_profile,'Age':age,'Income':income,'Credit Score':credit_score,'Credit History Length':credit_history_length,'Number of Existing Loans':number_of_existing_loans,'Loan Amount':loan_amount,'Loan Tenure':loan_tenure,'LTV Ratio':ltv_ratio,'Profile Score':profile_score}
+    model = joblib.load('Vehicle Loan/vehicle_model.pkl')
+    input_transformed = pd.DataFrame([input_data])
+    prediction = model.predict(input_transformed)
+    if prediction[0]==1:
+        vehicle_loan=1
+    #inputs for bank loan
+    #gender, married, dependents, education, self employed, applicant income, coapplicant income, loan amount, loan amount term, credit history, property area
+    gender=0 if user_data[3]=='Male' else 1
+    married=1 if user_data[11]=='Yes' else 0
+    dependents=user_data[12]
+    education=1 if user_data[13]=='Graduate' else 0
+    self_employed=1 if user_data[14]=='Yes' else 0
+    applicant_income=user_data[18]
+    coapplicant_income=user_data[19]
+    loan_amount=user_data[20]
+    loan_amount_term=user_data[21]
+    credit_history=1 if user_data[17]=='Yes' else 0
+    property_area=2 if user_data[15]=='Semiurban' else 1 if user_data[15]=='Urban' else 0
+    banK_loan_model = joblib.load("Bank Loan/bank_loan_model.pkl")
+    bank_loan_scaler = joblib.load("Bank Loan/bank_loan_scaler.pkl")
+    data=[[gender, married, dependents, education, self_employed, applicant_income, coapplicant_income, loan_amount, loan_amount_term, credit_history, property_area]]
+    data = bank_loan_scaler.transform(data)
+    prediction = banK_loan_model.predict(data)
+    if prediction[0]==1:
+        bank_loan=1
+    
+    #display the loans that are available to the user
+    existing_loan_name=user_data[25]
+    #if the user has existing loan then remove that loan from the available loans
+    hl=0
+    bl=0
+    cl=0
+    hil=0
+    if existing_loan_name=='Bank Loan':
+        bl=1
+    elif existing_loan_name=='Home Loan':
+        hl=1
+    elif existing_loan_name=='Car Loan':
+        cl=1
+    elif existing_loan_name=='Personal Loan':
+        hil=1
+    else:
+        pass
+    #display the available loans
+    st.markdown('<h4 style="color: green; text-align: center;">Loans that are available to you</h4>', unsafe_allow_html=True)
+    st.markdown('----')
+    col1,col2,col3,col4=st.columns(4)
+    with col1:
+        st.markdown('<h3 style="color: #9c0399; text-align: center;">BANK LOAN</h3>', unsafe_allow_html=True)
+        st.markdown('<a href="https://sbi.co.in/web/personal-banking/loans/personal-loans" target="_blank"><img src="https://cdni.iconscout.com/illustration/premium/thumb/bank-loan-illustration-download-in-svg-png-gif-file-formats--paper-mortgage-property-policy-document-operations-pack-finance-illustrations-4833670.png?f=webp" alt="Bank Loan" style="width:115%;height:100%;"></a>', unsafe_allow_html=True)
+        if bank_loan==1 and bl!=1:
+            st.markdown(
+                """
+                <style>
+                    .approved-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: green;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .approved-button:hover {
+                        background-color: darkgreen;
+                    }
+                </style>
+                <button class="approved-button">Approved</button>
+                """,
+                unsafe_allow_html=True
+            )
+        elif bank_loan==0 and bl!=1:
+            st.markdown(
+                """
+                <style>
+                    .apply-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: red;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .apply-button:hover {
+                        background-color: darkred;
+                    }
+                </style>
+                <button class="apply-button">Denied</button>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                """
+                <style>
+                    .appro-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: orange;
+                        color: black;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .approved-button:hover {
+                        background-color:orange;
+                    }
+                </style>
+                <button class="appro-button">Exists</button>
+                """,
+                unsafe_allow_html=True
+            )
+    with col2:
+        st.markdown('<h3 style="color: #9c0399; text-align: center;">HOME LOAN</h3>', unsafe_allow_html=True)
+        st.markdown('<a href="https://www.hdfc.com/home-loan" target="_blank"><img src="https://static.vecteezy.com/system/resources/thumbnails/035/048/659/small/ai-generated-house-in-hand-real-estate-concept-on-transparent-background-ai-generated-png.png" alt="Home Loan" style="width:105%;height:100%;"></a>', unsafe_allow_html=True)
+        if home_loan==1 and hl!=1:
+            st.markdown(
+                """
+                <style>
+                    .approved-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: green;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .approved-button:hover {
+                        background-color: darkgreen;
+                    }
+                </style>
+                <button class="approved-button">Approved</button>
+                """,
+                unsafe_allow_html=True
+            )
+        elif home_loan==0 and hl!=1:
+            st.markdown(
+                """
+                <style>
+                    .apply-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: red;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .apply-button:hover {
+                        background-color: darkred;
+                    }
+                </style>
+                <button class="apply-button">Denied</button>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                """
+                <style>
+                    .appr-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: orange;
+                        color: black;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .approved-button:hover {
+                        background-color: darkgreen;
+                    }
+                </style>
+                <button class="appr-button">Exists</button>
+                """,
+                unsafe_allow_html=True
+            )
+    with col3:
+        st.markdown('<h3 style="color: #9c0399; text-align: center;">VEHICLE LOAN</h3>', unsafe_allow_html=True)
+        st.markdown('<a href="https://www.hdfcbank.com/personal/loans/car-loan" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2132/2132830.png" alt="Vehicle Loan" style="width:105%;height:100%;"></a>', unsafe_allow_html=True)
+        if vehicle_loan==1 and cl!=1:
+            st.markdown(
+                """
+                <style>
+                    .approved-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: green;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .approved-button:hover {
+                        background-color: darkgreen;
+                    }
+                </style>
+                <button class="approved-button">Approved</button>
+                """,
+                unsafe_allow_html=True
+            )
+        elif vehicle_loan==0 and cl!=1:
+            st.markdown(
+                """
+                <style>
+                    .apply-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: red;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .apply-button:hover {
+                        background-color: darkred;
+                    }
+                </style>
+                <button class="apply-button">Denied</button>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                """
+                <style>
+                    .approv-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: orange;
+                        color: white;
+                        font-size: 15px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .approv-button:hover {
+                        background-color: darkgreen;
+                    }
+                </style>
+                <button class="approved-button">Exists</button>
+                """,
+                unsafe_allow_html=True
+            )
+    with col4:
+        st.markdown('<h3 style="color: #9c0399; text-align: center;">HEALTH LOAN</h3>', unsafe_allow_html=True)
+        st.markdown('<a href="https://www.policybazaar.com/health-insurance/" target="_blank"><img src="https://www.cashe.co.in/wp-content/uploads/2023/12/Medical-2-1.png" alt="Health Insurance Loan" style="width:105%;height:60%;"></a>', unsafe_allow_html=True)
+        if health_insurance_loan and hil!=1:
+            st.markdown(
+                """
+                <style>
+                    .approved-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: green;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .approved-button:hover {
+                        background-color: darkgreen;
+                    }
+                </style>
+                <button class="approved-button">Approved</button>
+                """,
+                unsafe_allow_html=True
+            )
+        elif health_insurance_loan==0 and hil!=1:
+            st.markdown(
+                """
+                <style>
+                    .apply-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: red;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .apply-button:hover {
+                        background-color: darkred;
+                    }
+                </style>
+                <button class="apply-button">Denied</button>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                """
+                <style>
+                    .approve-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: orange;
+                        color: white;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px 10px;
+                        border-radius: 10px;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        width: 150px;
+                        margin: auto;
+                    }
+                    .approve-button:hover {
+                        background-color: orange;
+                    }
+                </style>
+                <button class="approve-button">Exists</button>
+                """,
+                unsafe_allow_html=True
+            )
+    st.markdown('----')
+    #select box which loans are denied
+    deniel=[]
+    if home_loan==0 and hl!=1:
+        deniel.append('Home Loan')
+    elif bank_loan==0 and bl!=1:
+        deniel.append('Bank Loan')
+    elif vehicle_loan==0 and cl!=1:
+        deniel.append('Vehicle Loan')
+    elif health_insurance_loan==0 and hil!=1:
+        deniel.append('Health Insurance Loan')
+    col1,col2,col3=st.columns([1,2,1])
+    sel=col2.selectbox('Select the loan that is denied',deniel)
+    if sel=='Home Loan':
+        #plot the reasons for denial
+        #home loan are Gender, Married, Dependents, Education, CoapplicantIncome, LoanAmount, Loan_Amount_Term, Credit_History, Property_Area
+        gender = 1 if user_data[3]=='Male' else 0
+        married = 0 if user_data[11]=='Unmarried' else 1
+        dependents = user_data[12]
+        education = 1 if user_data[13]=='Graduate' else 0
+        coapplicant_income = user_data[19]
+        loan_amount = user_data[20]
+        loan_amount_term = user_data[21]
+        credit_history = 1 if user_data[17]=='Good' else 0.5 if user_data[17]=='Average' else 0
+        property_area = 0 if user_data[15]=='Rural' else 2 if user_data[15]=='Urban' else 1
+
+        # Create DataFrame with reasons for denial
+        df = pd.DataFrame({
+            "Feature": ["Coapplicant Income", "Loan Amount", "Loan Amount Term", "Credit History"],
+            "Current Value": [coapplicant_income, loan_amount, loan_amount_term, credit_history]
+        })
+
+        # Set threshold values for approval
+        threshold_values = {
+            "Coapplicant Income": 5000,
+            "Loan Amount": 100,
+            "Loan Amount Term": 360,
+            "Credit History": 1
+        }
+
+        df["Threshold for Approval"] = df["Feature"].map(threshold_values)
+        col2.markdown('----')
+        st.markdown('<h3 style="color: red; text-align: center;">Loan Denial Factors</h3>', unsafe_allow_html=True)
+        col1,col2=st.columns(2)
+        # Display DataFrame in Streamlit
+        # Plot 1: Bar Chart with different colors
+        plt.figure(figsize=(10, 5))
+        colors = sns.color_palette("husl", len(df))  # Different colors
+        plt.bar(df["Feature"], df["Current Value"], color=colors)
+        plt.xticks(rotation=45)
+        plt.ylabel("Values")
+        plt.title("Factors Affecting Loan Denial")
+        col1.pyplot(plt)
+
+        # Plot 3: Approval vs Denial Comparison
+        plt.figure(figsize=(10, 5))
+        bar_width = 0.4
+
+        plt.bar(df["Feature"], df["Current Value"], width=bar_width, label="Current Value", color="red")
+        plt.bar(df["Feature"], df["Threshold for Approval"], width=bar_width, label="Threshold for Approval", color="green", alpha=0.7)
+
+        plt.xticks(rotation=45)
+        plt.ylabel("Values")
+        plt.title("Loan Approval Thresholds Comparison")
+        plt.legend()
+        col2.pyplot(plt)
+    elif sel=='Bank Loan':
+        #plot the reasons for denial
+        #gender, married, dependents, education, self employed, applicant income, coapplicant income, loan amount, loan amount term, credit history, property area
+        gender=0 if user_data[3]=='Male' else 1
+        married=1 if user_data[11]=='Yes' else 0
+        dependents=user_data[12]
+        education=1 if user_data[13]=='Graduate' else 0
+        self_employed=1 if user_data[14]=='Yes' else 0
+        applicant_income=user_data[18]
+        coapplicant_income=user_data[19]
+        loan_amount=user_data[20]
+        loan_amount_term=user_data[21]
+        credit_history=1 if user_data[17]=='Yes' else 0
+        property_area=2 if user_data[15]=='Semiurban' else 1 if user_data[15]=='Urban' else 0
+        # Create DataFrame with reasons for denial
+        df = pd.DataFrame({
+            "Feature": ["Applicant Income", "Coapplicant Income", "Loan Amount", "Loan Amount Term", "Credit History"],
+            "Current Value": [applicant_income, coapplicant_income, loan_amount, loan_amount_term, credit_history]
+        })
+
+        # Set threshold values for approval
+        threshold_values = {
+            "Applicant Income": 5000,
+            "Coapplicant Income": 5000,
+            "Loan Amount": 100,
+            "Loan Amount Term": 360,
+            "Credit History": 1
+        }
+
+        df["Threshold for Approval"] = df["Feature"].map(threshold_values)
+
+        # Display DataFrame in Streamlit
+        col2.markdown('----')
+        st.markdown('<h3 style="color: red; text-align: center;">Loan Denial Factors</h3>', unsafe_allow_html=True)
+        col1,col2=st.columns(2)
+
+        # Plot 1: Bar Chart with different colors
+        plt.figure(figsize=(10, 5))
+        colors = sns.color_palette("husl", len(df))  # Different colors
+        plt.bar(df["Feature"], df["Current Value"], color=colors)
+        plt.xticks(rotation=45)
+        plt.ylabel("Values")
+        plt.title("Factors Affecting Loan Denial")
+        col1.pyplot(plt)
+
+        # Plot 3: Approval vs Denial Comparison
+        plt.figure(figsize=(10, 5))
+        bar_width = 0.4
+
+        plt.bar(df["Feature"], df["Current Value"], width=bar_width, label="Current Value", color="red")
+        plt.bar(df["Feature"], df["Threshold for Approval"], width=bar_width, label="Threshold for Approval", color="green", alpha=0.7)
+
+        plt.xticks(rotation=45)
+        plt.ylabel("Values")
+        plt.title("Loan Approval Thresholds Comparison")
+        plt.legend()
+        col2.pyplot(plt)
+    elif sel=='Vehicle Loan':
+        #plot the reasons for denial
+        #gender, Existing Customer, Employment Profile, Age Income, Credit Score, Credit History Length,Number of Existing Loans,Loan Amount, Loan Tenure, LTV Ratio, Profile Score
+        st.write('You are denied a Vehicle Loan')
+        gender=1 if user_data[3]=='Male' else 0
+        existing_customer=1 if user_data[22]=='Yes' else 0
+        l=['Salaried', 'Self-Employed', 'Freelancer', 'Student' ,'Unemployed']
+        employment_profile=l.index(user_data[14])
+        age=user_data[6]
+        income=user_data[18]
+        credit_score=user_data[16]
+        dic={'Good':1,'Bad':0,'Average':0.5}
+        credit_history_length=dic[user_data[17]]
+        number_of_existing_loans=1
+        loan_amount=user_data[20]
+        loan_tenure=user_data[21]
+        ltv_ratio=loan_amount/loan_tenure
+        profile_score=1
+
+        # Create DataFrame with reasons for denial
+        df = pd.DataFrame({
+            "Feature": ["Income", "Credit Score", "Credit History Length", "LTV Ratio"],
+            "Current Value": [income, credit_score, credit_history_length, ltv_ratio]
+        })
+
+        # Set threshold values for approval
+        threshold_values = {
+            "Income": 5000,
+            "Credit Score": 500,
+            "Credit History Length": 1,
+            "LTV Ratio": 0.5
+        }
+
+        df["Threshold for Approval"] = df["Feature"].map(threshold_values)
+
+        # Display DataFrame in Streamlit
+        col2.markdown('----')
+        st.markdown('<h3 style="color: red; text-align: center;">Loan Denial Factors</h3>', unsafe_allow_html=True)
+        col1,col2=st.columns(2)
+
+        # Plot 1: Bar Chart with different colors
+        plt.figure(figsize=(10, 5))
+        colors = sns.color_palette("husl", len(df))  # Different colors
+        plt.bar(df["Feature"], df["Current Value"], color=colors)
+        plt.xticks(rotation=45)
+        plt.ylabel("Values")
+        plt.title("Factors Affecting Loan Denial")
+        col1.pyplot(plt)
+
+        # Plot 3: Approval vs Denial Comparison
+        plt.figure(figsize=(10, 5))
+        bar_width = 0.4
+
+        plt.bar(df["Feature"], df["Current Value"], width=bar_width, label="Current Value", color="red")
+        plt.bar(df["Feature"], df["Threshold for Approval"], width=bar_width, label="Threshold for Approval", color="green", alpha=0.7)
+
+        plt.xticks(rotation=45)
+        plt.ylabel("Values")
+        plt.title("Loan Approval Thresholds Comparison")
+        plt.legend()
+        col2.pyplot(plt)
+    elif sel=='Health Insurance Loan':
+        #plot the reasons for denial
+        #health inputs are age, sex,weight,bmi,hereiditary disease,no of dependtss, smoking, city, bp,diabetes, regular exercise, job title
+        age=user_data[6]
+        sex = 0 if user_data[3] == 'Female' else 1
+        weight=user_data[4]
+        bmi=weight/((weight/100)**2)
+        dic={'NoDisease':0, 'Epilepsy':1, 'EyeDisease':2, 'Alzheimer':3, 'Arthritis':4,
+        'HeartDisease':5, 'Diabetes':6, 'Cancer':7, 'High BP':8, 'Obesity':9}
+        hereditary_disease=dic[user_data[5]]
+        no_of_dependents=user_data[12]
+        smoking=1 if user_data[7]=='Yes' else 0
+        city=0
+        bp=user_data[8]
+        diabetes=1 if user_data[9]=='Yes' else 0
+        regular_exercise=1 if user_data[10]=='Yes' else 0
+        val=[ 2, 16,  0, 10, 22, 12, 32, 13, 30, 33, 15, 28, 29,  5,  8,  6,  9,
+        26,  1, 19, 34, 18,  4, 23, 20,  7, 31, 14,  3, 11, 24, 17, 25, 27,
+        21]
+        job_title=random.choice(val)
+
+        # Create DataFrame with reasons for denial
+        df = pd.DataFrame({
+            "Feature": ["Age", "Weight", "BMI", "Hereditary Disease", "No of Dependents", "Smoking", "BP", "Diabetes", "Regular Exercise", "Job Title"],
+            "Current Value": [age, weight, bmi, hereditary_disease, no_of_dependents, smoking, bp, diabetes, regular_exercise, job_title]
+        })
+
+        # Set threshold values for approval
+        threshold_values = {
+            "Age": 18,
+            "Weight": 50,
+            "BMI": 18.5,
+            "Hereditary Disease": 0,
+            "No of Dependents": 0,
+            "Smoking": 0,
+            "BP": 120,
+            "Diabetes": 0,
+            "Regular Exercise": 1,
+            "Job Title": 0
+        }
+
+        df["Threshold for Approval"] = df["Feature"].map(threshold_values)
+
+        col2.markdown('----')
+        st.markdown('<h3 style="color: red; text-align: center;">Loan Denial Factors</h3>', unsafe_allow_html=True)
+        col1,col2=st.columns(2)
+
+        # Plot 1: Bar Chart with different colors
+        plt.figure(figsize=(10, 5))
+        colors = sns.color_palette("husl", len(df))  # Different colors
+        plt.bar(df["Feature"], df["Current Value"], color=colors)
+        plt.xticks(rotation=45)
+        plt.ylabel("Values")
+        plt.title("Factors Affecting Loan Denial")
+        col1.pyplot(plt)
+
+        # Plot 3: Approval vs Denial Comparison
+        plt.figure(figsize=(10, 5))
+        bar_width = 0.4
+
+        plt.bar(df["Feature"], df["Current Value"], width=bar_width, label="Current Value", color="red")
+        plt.bar(df["Feature"], df["Threshold for Approval"], width=bar_width, label="Threshold for Approval", color="green", alpha=0.7)
+
+        plt.xticks(rotation=45)
+        plt.ylabel("Values")
+        plt.title("Loan Approval Thresholds Comparison")
+        plt.legend()
+        col2.pyplot(plt)
 
 
 def visualizations_page():
@@ -219,120 +883,82 @@ def visualizations_page():
         <style>
         /* Apply background image to the main content area */
         .main {
-            background-image: url('https://img.freepik.com/free-vector/network-line-abstract-background-gradient_483537-2780.jpg');
+            background-image: url('https://www.onlinecredit.com.sg/wp-content/uploads/2021/08/woman-hand-holding-money-bag-concept-saving-finance-accounting-scaled.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-color:rgba(255,255,255,0.6);
+            background-blend-mode: overlay;
         }
         </style>
         """,
         unsafe_allow_html=True
     )
-    data=pd.read_csv('Loan_Data/train.csv')
-    st.title('Visualizations')
-    #place option for the user to see the EDA and model plots
-    menu=st.selectbox('Select the type of visualization',['EDA','Model'])
-    if menu=='EDA':
-        st.write('This is the data used for the visualization')
-        st.write(data)
-        st.write('The following are the visualizations of the data')
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write('1. Applicant Income')
-            st.line_chart(data['ApplicantIncome'])
-            st.write('3. Loan Amount')
-            st.line_chart(data['LoanAmount'])
-            st.write('5. Credit History')
-            st.line_chart(data['Credit_History'])
-            st.write('7. Count of Loan Status')
-            st.bar_chart(data['Loan_Status'].value_counts())
-            st.write('9. Count of Gender')
-            st.bar_chart(data['Gender'].value_counts(), color=(175, 238, 238))  # RGB equivalent of 'paleturquoise'
-            st.write('11. Count of Education')
-            st.bar_chart(data['Education'].value_counts(), color=(255, 192, 203))  # RGB equivalent of 'pink'
-            st.write('13. Count of Married')
-            st.bar_chart(data['Married'].value_counts(), color=(0, 0, 255))  # RGB equivalent of 'blue'
-            st.write('15. Gender vs Loan Status')
-            st.scatter_chart(data, x='Gender', y='Loan_Status')
-            st.write('17. Married vs Loan Status')
-            st.line_chart(data, x='Married', y='Loan_Status')
+    st.title('Update Your Details')
+    st.write('Please update your details below')
+    # Extracting user data
+    user_data = get_user_by_email(st.session_state.get('user', ['', 'Unknown', 'Unknown'])[2])
+    col1,col2,col3=st.columns(3)
+    weight = col1.number_input('Enter the weight (kg)',min_value=10,value=user_data[4])
+    hereditary_disease = col2.selectbox('Do you have any hereditary disease?',['NoDisease', 'Epilepsy', 'EyeDisease', 'Alzheimer', 'Arthritis',
+       'HeartDisease', 'Diabetes', 'Cancer', 'High BP', 'Obesity'])
+    age = col3.slider('Enter the age',min_value=1,value=user_data[6])
+    col1,col2,col3,col4=st.columns(4)
+    smoking = col1.selectbox('Do you smoke?',['Yes','No'])
+    regular_bp_level = col2.number_input('Regular blood pressure level',value=user_data[8])
+    diabetes = col3.selectbox('Do you have diabetes?',['Yes','No'])
+    regular_exercise = col4.selectbox('Do you do regular exercise?',['Yes','No'])
+    col1,col2,col3,col4=st.columns(4)
+    marital_status = col1.selectbox('Choose Marital Status',['Married','Unmarried','Divorced','Widowed'])
+    no_of_dependents = col2.number_input('Number of dependents',min_value=0,value=user_data[12])
+    education = col3.selectbox('Choose Education',['Graduate','Non Graduate'])
+    employment = col4.selectbox('Choose Employment',['Salaried', 'Self-Employed', 'Freelancer', 'Student', 'Unemployed'])
+    col1,col2,col3,col4=st.columns(4)
+    property_status = col1.selectbox('Choose Property Status',['Rural','Urban','Semi Urban'])
+    credit_score = col2.number_input('Enter the credit score',min_value=0,value=user_data[16])
+    credit_history = col3.selectbox('Choose Credit History',['Good','Bad','Average'])
+    annual_income = col4.number_input('Enter the annual income (K)',min_value=0,value=user_data[18])
+    col1,col2,col3,col4=st.columns(4)
+    co_applicant_annual_income = col1.number_input('Co-applicant Income (K)',min_value=0,value=user_data[19])
+    loan_amount = col2.number_input('Enter the loan amount (K)',min_value=0,value=user_data[20])
+    loan_duration = col3.number_input('Enter the loan duration (years)',min_value=1,value=user_data[21],step=1)
+    existing_loan = col4.selectbox('Choose Existing Loan',['Yes','No'])
+    col1,col2,col3,col4=st.columns(4)
+    existing_loan_amount = col1.number_input('Existing loan amount',min_value=0,value=user_data[23])
+    existing_loan_duration = col2.number_input('Existing loan duration (years)',min_value=1,value=user_data[24],step=1)
+    existing_loan_type=col3.selectbox('Choose Existing Loan Type',['Home Loan','Personal Loan','Car Loan','Bank Loan','Others'],index=0 if user_data[25]=='Home Loan' else 1 if user_data[25]=='Personal Loan' else 2 if user_data[25]=='Car Loan' else 3 if user_data[25]=='Education Loan' else 4)
+    language = col4.selectbox("Preferred Language", ["English", "Telugu", "Hindi"],index=0 if user_data[26]=='English' else 1 if user_data[26]=='Telugu' else 2)
+    if st.button('Update',type='primary',key='update'):
+        # Ensure that 'user_data' has exactly 26 values
+        user_id = user_data[0]
 
-        with col2:
-            st.write('2. Co-Applicant Income')
-            st.line_chart(data['CoapplicantIncome'])
-            st.write('4. Loan Amount Term')
-            st.line_chart(data['Loan_Amount_Term'])
-            st.write('6. Count of Dependents')
-            st.bar_chart(data['Dependents'].value_counts(), color=(0, 255, 0))
-            st.write('8. Count of Credit History')
-            st.bar_chart(data['Credit_History'].value_counts(), color=(255, 255, 0))  # RGB equivalent of 'yellow'
-            st.write('10. Count of Property Area')
-            st.bar_chart(data['Property_Area'].value_counts(), color=(255, 165, 0))  # RGB equivalent of 'orange'
-            st.write('12. Count of Self Employed')
-            st.bar_chart(data['Self_Employed'].value_counts(), color=(255, 0, 0))  # RGB equivalent of 'red'
-            st.write('14. Count of Dependents')
-            st.bar_chart(data['Dependents'].value_counts(), color=(0, 255, 0))  # RGB equivalent of 'lime'
-            st.write('16. Education vs Loan Status')
-            st.line_chart(data, x='Education', y='Loan_Status')
-            st.write('18. Property Area vs Loan Status')
-            st.scatter_chart(data, x='Property_Area', y='Loan_Status')
-    if menu=='Model':
-        st.write('This is the graph of the model training')
-        models= st.radio('Select the model',['Logistic Regression','Random Forest','Decision Tree','Linear Discriminant Analysis','Support Vector Classifier','K- Neirest Neighbour','Naive Bayes'])
-        st.markdown('----')
-        if models=='Logistic Regression':
-            #info about the model
-            st.write('Logistic Regression is a classification algorithm used to assign observations to a discrete set of classes. Unlike linear regression which outputs continuous number values, logistic regression transforms its output using the logistic sigmoid function to return a probability value which can then be mapped to two or more discrete classes.')
-            #image of the model
-            st.image("https://images.spiceworks.com/wp-content/uploads/2022/04/11040521/46-4-e1715636469361.png")
-            #confusion matrix
-            st.write('Confusion Matrix')
-            st.image("Model/1.png")
-        if models=='Random Forest':
-            #info about the model
-            st.write('Random Forest is a supervised learning algorithm. The "forest" it builds, is an ensemble of decision trees, usually trained with the “bagging” method. The general idea of the bagging method is that a combination of learning models increases the overall result.')
-            #image of the model
-            st.image("https://images.javatpoint.com/tutorial/machine-learning/images/random-forest-algorithm.png")
-            st.image('Model/2.png')
-        if models=='Decision Tree':
-            #info about the model
-            st.write('A decision tree is a flowchart-like tree structure where an internal node represents a feature(or attribute), the branch represents a decision rule, and each leaf node represents the outcome. The topmost node in a decision tree is known as the root node.')
-            #image of the model
-            st.image("https://images.javatpoint.com/tutorial/machine-learning/images/decision-tree-classification-algorithm.png")
-            st.image('Model/3.png')
-        if models=='Linear Discriminant Analysis':
-            #info about the model
-            st.write('Linear Discriminant Analysis (LDA) is a dimensionality reduction technique used as a pre-processing step in Machine Learning and pattern classification applications. The goal of LDA is to project a feature space (a dataset n-dimensional samples) onto a smaller subspace k (where k≤n−1) while maintaining the class-discriminatory information.')
-            #image of the model
-            st.image("https://media.licdn.com/dms/image/v2/C4D12AQHnj8ho2kN_qQ/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1613927657941?e=2147483647&v=beta&t=8p-MS_99xloplyq5p2UHip1DMQ9siXdqNKw9dkOuec8")
-            st.image('Model/4.png')
-        if models=='Support Vector Classifier':
-            #info about the model
-            st.write('Support Vector Machine (SVM) is a supervised machine learning algorithm that can be employed for both classification and regression purposes. SVMs are more commonly used in classification problems and as such, this is what we will focus on in this post.')
-            #image of the model
-            st.image("https://images.javatpoint.com/tutorial/machine-learning/images/support-vector-machine-algorithm.png")
-            st.image('Model/5.png')
-        if models=='K- Neirest Neighbour':
-            #info about the model
-            st.write('The k-nearest neighbors (KNN) algorithm is a simple, easy-to-implement supervised machine learning algorithm that can be used to solve both classification and regression problems.')
-            #image of the model
-            st.image("https://images.javatpoint.com/tutorial/machine-learning/images/k-nearest-neighbor-algorithm-for-machine-learning2.png")
-            st.image('Model/6.png')
-        if models=='Naive Bayes':
-            #info about the model
-            st.write('Naive Bayes is a simple technique for constructing classifiers: models that assign class labels to problem instances, represented as vectors of feature values, where the class labels are drawn from some finite set.')
-            #image of the model
-            st.image("https://miro.medium.com/v2/resize:fit:1200/0*0sObCvaI0oijvekS.png")
-            st.image('Model/7.png')
+        # Prepare user data excluding the password
+        user_data = [
+            weight, hereditary_disease, age, smoking, regular_bp_level, diabetes, 
+            regular_exercise, marital_status, no_of_dependents, education, employment, property_status, 
+            credit_score, credit_history, annual_income, co_applicant_annual_income, loan_amount, 
+            loan_duration, existing_loan, existing_loan_amount, existing_loan_duration, existing_loan_type, 
+            language
+        ]
+
+        # Call the update_user function
+        res=update_user(user_id, *user_data)
+        if res:
+            st.success('Updated Successfully')
+        else:
+            st.error('Error')
+
 def user_home_page():
     # Navigation menu for user dashboard
     
     with st.sidebar:
+        col1,col2,col3=st.columns([1,4,1])
+        col2.image('https://cdn-icons-png.flaticon.com/512/1177/1177568.png',use_column_width=True)
         name=st.session_state['user'][1]
         st.markdown(f"<h1 style='text-align: center; color: black;'><b>{name}'s Dashboard</b></h1>", unsafe_allow_html=True)
         selected_tab = option_menu(
             menu_title=None,
-            options=["User Profile", "Visualizations", "Bank Loan",'Logout'],
+            options=["User Profile", "Update Page", "Loans",'Logout'],
             icons=['person','bar-chart','bank'], menu_icon="cast", default_index=0,
         styles={
         "nav-link-selected": {"background-color": "red", "color": "white", "border-radius": "30px"},
@@ -340,9 +966,9 @@ def user_home_page():
         )
     if selected_tab == "User Profile":
         user_profile()
-    elif selected_tab == "Bank Loan":
+    elif selected_tab == "Loans":
         loan_page()
-    elif selected_tab == "Visualizations":
+    elif selected_tab == "Update Page":
         visualizations_page()
     elif selected_tab=='Logout':
         # Logout functionality
