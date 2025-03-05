@@ -3,10 +3,15 @@ from streamlit_option_menu import option_menu
 import pandas as pd
 from db_manager import update_user,get_user_by_email
 import pickle
+import gdown
 import matplotlib.pyplot as plt
 import joblib
 import seaborn as sns
 import random
+file_id = "1W8O2C5tQ5fHs8FASyRHigYccHT-gCdyj"
+output='health_insurance_model.pkl'
+url = f"https://drive.google.com/uc?id={file_id}"
+gdown.download(url, output, quiet=False)
 def user_profile():
     st.markdown(
     """
@@ -183,11 +188,15 @@ def loan_page():
        26,  1, 19, 34, 18,  4, 23, 20,  7, 31, 14,  3, 11, 24, 17, 25, 27,
        21]
     job_title=random.choice(val)
-    model = joblib.load("Health Loan/health_insurance_model.pkl")
+    
+
+    # Google Drive file ID extracted from the link
+    
+    health_model=joblib.load('health_insurance_model.pkl')
     input_data = pd.DataFrame([[
         age, sex, weight, bmi, hereditary_disease, no_of_dependents, smoking, city, bp, diabetes, regular_exercise, job_title
     ]])
-    prediction = model.predict(input_data)
+    prediction = health_model.predict(input_data)
     health_insurance_loan=prediction[0]
 
     
