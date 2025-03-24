@@ -67,8 +67,9 @@ def login_page():
                         to_email=email
                         subject = "OTP for Loan Prediction System"
                         body = f"Hello,\n\nYour OTP is {otp}. Please enter this OTP to login.\n\nRegards,\nTeam Loan Prediction System"
-                        from_email = 'noreply.vvit.college@gmail.com'
-                        from_password = 'wugwrszzbcxcujif'  
+                        from_email = 'loan95941@gmail.com'
+                        from_password = 'xmqltsuqtyqjlbdd'  
+                        # Send the alert email
                         send_alert_email(to_email, subject, body, from_email, from_password)
                         update_otp(email, otp)
                         st.session_state["otp_sent"] = True

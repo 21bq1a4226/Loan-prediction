@@ -55,7 +55,7 @@ def register_page():
         existing_loan_duration = col4.number_input('Enter the existing loan duration (years)',min_value=1,step=1)
         col1,col2,col3,col4=st.columns(4)
         existing_loan_type=col1.selectbox('Choose Existing Loan Type',['Home Loan','Personal Loan','Car Loan','Bank Loan','Others'])
-        language = col2.selectbox("Preferred Language", ["English", "Telugu", "Hindi"])
+        language = col2.selectbox("Preferred Language", ["English", "Telugu"])
         password = col3.text_input("Password", type="password")
         retype_password = col4.text_input("Retype Password", type="password")
         otp=0
@@ -65,7 +65,7 @@ def register_page():
         register_button = st.form_submit_button("Register",type='primary')
 
         # Handling form submission
-        if register_button and name and email and password and retype_password and gender and weight and hereditary_disease and age and smoking and regular_bp_level and diabetes and regular_exercise and marital_status and no_of_dependents and education and employment and property_status and credit_score and credit_history and annual_income and co_applicant_annual_income and loan_amount and loan_duration and existing_loan and existing_loan_amount and existing_loan_duration and existing_loan_type and language:
+        if register_button:
             # Validate email using regex
             email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
             if not re.match(email_regex, email):
@@ -79,5 +79,3 @@ def register_page():
                     st.success("Registration Successful!")
                 else:
                     st.error("Email already exists!")
-        else:
-            st.warning("All fields are required!")
